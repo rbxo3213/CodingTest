@@ -1,0 +1,93 @@
+
+import java.io.*;
+import java.util.*;
+
+public class BOJ1019{ // 바둑판 문제
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        
+        int y = Integer.parseInt(st.nextToken());
+        int x = Integer.parseInt(st.nextToken());
+        boolean flag = (x%2==0) ? true : false;
+        
+        String[][] board = new String[y][x]; // 입력받은 바둑판 배열
+        
+        int[][] arr = new int[(x-8+1)*(y-8+1)][5];
+        // 들어갈 수 있는 바둑판{x시작, x끝, y시작, y끝, count}의 배열
+        
+        // arr 배열 초기화
+        int index = 0;
+        for(int i = 0; i<y-8+1; i++){ 
+            for(int j = 0; j<x-8+1; j++){
+                arr[index][0]=j;
+                arr[index][1]=j+7;
+                arr[index][2]=i;
+                arr[index][3]=i+7;
+                arr[index][4]=0;
+                //bw.write("arr["+(index)+"]:"+Arrays.toString(arr[index])+"\n");
+                index++;
+            }
+        }
+        // board배열 입력받아 만들기
+        for(int i = 0; i<y; i++){
+            String[] arrX = br.readLine().trim().split("");
+            board[i]=arrX;
+            for(String s : board[i]) {
+            	//bw.write(s+"");
+            }
+            //bw.write("\n");
+        }
+        // boolean stone = false; // black은 true, white는 false
+        
+        String stone = board[0][0]; // 첫 돌을 받고, board[0][0]은 continue. 이후 돌 검사
+
+        // board배열 순회하기
+        for(int i = 0; i<y; i++){
+            for(int j = 0; j<x; j++){
+                if(i==0&&j==0) {
+                	//bw.write(stone+"\n");
+                	stone=flip(stone);
+                	//bw.write(stone+"\n");
+                	continue;
+                }
+                /* stone은 매 번 무조건 바뀌면서 다음 칸이 본인과 일치해야 함. 일치하지 않으면 count를 ++;
+                
+                */
+                
+                if(!board[i][j].equals(stone)){
+                    for(int[] arrChk : arr){
+                        if(j>=arrChk[0]&&j<=arrChk[1]&&i>=arrChk[2]&&i<=arrChk[3]){
+                            arrChk[4]+=1;
+                            
+                        }
+                        
+                    }
+                    stone=flip(stone);
+                } else stone=flip(stone);
+                
+            }
+            if(flag) stone=flip(stone);
+        }
+        for(int[] a : arr) {
+        	bw.write(Arrays.toString(a)+"\n");
+        }
+        // arrChk[4]: 바둑판 별 칠하는 수가 최소인 arrChk[4]를 찾아 출력.
+        // arrChk[4]의 최솟값 출력하기
+        int min = arr[0][4];
+        for(int[] a: arr){
+            if(a[4]<min) min=a[4];
+        }
+        
+        bw.write(min+"\n");
+        bw.flush();
+        bw.close();
+        br.close();
+        
+    }
+    public static String flip(String s){
+        if(s.equals("B")) return "W";
+        else return "B";
+    }
+}
