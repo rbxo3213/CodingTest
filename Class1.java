@@ -49,7 +49,6 @@ public class Class1 {
         String[] wordLine = word.split("");
 
         int count = 0;
-        int matchingStart = 0;
         for(int i = 0; i<numstrLine.length; i++){
 
             if(map.get(Integer.parseInt(wordLine[count])).contains(numstrLine[i])){
@@ -93,3 +92,4 @@ public class Class1 {
         return map;
     }
 }
+
