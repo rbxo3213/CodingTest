@@ -1,0 +1,109 @@
+package ClassProblem;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+public class AccountAnalysis {
+	public static void main(String[] args) {
+		List<String> list = new ArrayList<>(Arrays.asList("4514--234495-1","305-44-291501","1-2-34-495-8623"
+				,"492134545151","623-421523-67341","-5439-59639921","6235-7X3+47-7456"
+				,"98-76-543-210","512-73-634901","000-999999-22555","064-82-792561"));
+		System.out.println(solution(list));
+	}
+	
+	public static List<Integer> solution(List<String> list){
+		//System.out.print(list);
+		//System.out.println();
+		Map<String, Integer>map = new HashMap<>();
+		for(int i = 0; i<list.size(); i++) {
+			int tmp = i;
+			//System.out.println(list.get(i));
+			if(!totalRule(list.get(i))) {
+				list.remove(i);
+				i = tmp-1;
+			}
+		}
+		//System.out.print(list);
+		for(int i = 0; i<list.size(); i++) {
+			if(!map.containsKey(bankId(list.get(i)))) {
+				map.put(bankId(list.get(i)), 1);
+			}else {
+				Integer tmp = map.get(bankId(list.get(i)));
+				map.replace(bankId(list.get(i)), tmp+1);
+			}
+		}
+		List<Integer> result = new ArrayList<>();
+		for(String s : map.keySet()) {
+			result.add(map.get(s));
+			System.out.print(s);
+		}
+		Collections.sort(result, Comparator.reverseOrder());
+		return result;
+	}
+	public static boolean totalRule(String account) {
+		if(!rule1(account)||!rule2(account)||!rule3(account)||!rule4(account)) return false;
+		return true;
+	}
+	public static boolean rule1(String account){
+		Set<String> set = new HashSet<>(Arrays.asList("0","1","2","3","4","5","6","7","8","9","-"));
+		for(String s : account.split("")) {
+			//System.out.print(s+" ");
+			if(!set.contains(s)) {
+				
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	public static boolean rule2(String account) {
+		Set<String> set = new HashSet<>(Arrays.asList("0","1","2","3","4","5","6","7","8","9"));
+		int count = 0;
+		for(String s : account.split("")) {
+			if(set.contains(s)) count++;
+		}
+		if(count<11 && count>14) return false;
+		return true;
+	}
+	public static boolean rule3(String account) {
+		int count = 0;
+		for(String s : account.split("")) {
+			if(s.equals("-")) count++;
+		}
+		if(count>3) return false;
+		return true;
+	}
+	public static boolean rule4(String account) {
+		if(account.charAt(0)=='-'||account.charAt(account.length()-1)=='-') return false;
+		int count = 0;
+		for(String s : account.split("")) {
+			if(s.equals("-")) {
+				count++;
+				if(count>=2) return false;
+			} else {
+				count=0;
+			}
+		}
+		return true;
+	}
+	public static String bankId(String account){
+		int count = 0;
+		StringBuilder sb = new StringBuilder();
+		String[] line = account.split("");
+		for(int i = 0; i<line.length; i++) {
+			if(line[i].equals("-")) {
+				count++;
+				sb.append(i+" ");
+			}
+		}
+		String result = sb.append(count).toString();
+		return result;
+	}
+}
