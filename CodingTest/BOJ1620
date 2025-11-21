@@ -1,0 +1,40 @@
+import java.util.*;
+import java.io.*;
+
+public class Main{
+    public static void main(String[] args)throws IOException{
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    StringBuilder sb = new StringBuilder();
+    StringTokenizer st = new StringTokenizer(br.readLine()," ");
+    int n = Integer.parseInt(st.nextToken());
+    int m = Integer.parseInt(st.nextToken());
+    
+    Map<String, Integer> map1 = new HashMap<>();
+    Map<Integer, String> map2 = new HashMap<>();
+    //Set<Integer> set = new HashSet<>("1","2","3","4","5","6","7","8","9","0");
+    for(int i = 1; i<=n; i++){
+        String name = br.readLine();
+        map1.put(name, i);
+        map2.put(i, name);
+    }
+    for(int i = 0; i<m; i++){
+        String tmp = br.readLine();
+        boolean isDigit = true;
+        for(String s : tmp.split("")){
+            if(!"0123456789".contains(s)) isDigit=false;
+        }
+        if(isDigit){
+            sb.append(map2.get(Integer.parseInt(tmp))+"\n");
+        }else{
+            sb.append(map1.get(tmp)+"\n");
+        }
+
+    }     
+    bw.write(sb.toString());
+        bw.flush();
+        bw.close();
+        br.close();
+    }
+
+}
