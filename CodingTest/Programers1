@@ -1,0 +1,23 @@
+import java.util.ArrayList;
+
+public class Prgmrs1 {
+	public static void main(String[] args) {
+		int[] result = solution(4,600);
+		System.out.println(java.util.Arrays.toString(result));
+	}
+	public static int[] solution(int l, int r) {
+		ArrayList<Integer>list = new ArrayList<>();
+		
+		for(int i = 1; i<64; i++) {
+			int num = Integer.parseInt(Integer.toBinaryString(i))*5;
+			// 1,2,3,4,5,6....는 이진수로 1, 10, 11, 100, 101, 110,... 임을 이용
+			if(l<=num && num<=r) {
+				list.add(num);
+			}
+		}
+		
+		return list.isEmpty() ? new int[] {-1} : list.stream().mapToInt(i->i).toArray();
+	}
+}
+
+// 이진수 이용해서 n과 0이 들어간 수만 배열에 넣기
