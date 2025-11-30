@@ -1,0 +1,70 @@
+import java.util.*;
+import java.io.*;
+
+public class Main{
+    public static ArrayList<Integer>[] graph;
+    public static boolean[] visited;
+    public static int[] visitedOrder;
+    public static int count = 1;
+    public static StringBuilder sb = new StringBuilder();
+
+    public static void main(String[] args)throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine()," ");
+
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+        int V = Integer.parseInt(st.nextToken());
+
+        graph = new ArrayList[N+1];
+        visited = new boolean[N+1];
+        visitedOrder = new int[N+1];
+
+        for(int i = 0; i<N+1; i++){
+            graph[i]=new ArrayList<Integer>();
+        }
+        for(int i = 0; i<M; i++){
+            st = new StringTokenizer(br.readLine()," ");
+            int node1 = Integer.parseInt(st.nextToken());
+            int node2 = Integer.parseInt(st.nextToken());
+
+            graph[node1].add(node2);
+            graph[node2].add(node1);
+        }
+        for(int i = 1; i<N+1; i++){
+            Collections.sort(graph[i]);
+        }
+        BFS(V);
+
+        for(int i = 1; i<visitedOrder.length; i++){
+            sb.append(visitedOrder[i]+"\n");
+        }
+        System.out.println(sb.toString());
+    }
+    public static void BFS(int node){
+        ArrayDeque<Integer>queue = new ArrayDeque<>();
+        queue.offer(node);
+
+        visited[node]=true;
+
+        while(!queue.isEmpty()){
+            int nowNode = queue.poll();
+
+            visitedOrder[nowNode]=count;
+            count++;
+
+            for(int nextNode : graph[nowNode]){
+                if(!visited[nextNode]){
+                    queue.offer(nextNode);
+                    visited[nextNode]=true;
+                }
+            }
+        }
+    }
+}
+
+/*
+DFS는 대충 알겠는데 BFS??
+왜 내림차순으로 노드 방문하는건데 오름차순 정렬해야 풀리는건지 이해가 안 된다....
+공책에 큐, / 스택, 재귀 직접 하나하나 순차적으로 쓰고 그려보면서 이해해보기
+*/
