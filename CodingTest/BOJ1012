@@ -1,0 +1,85 @@
+import java.util.*;
+import java.io.*;
+
+public class Main{
+    public static int[][] map;
+    public static boolean[][] visited;
+    public static int M; // 가로길이 (열)
+    public static int N; // 세로길이 (행)
+    public static int K; // 배추 수
+    
+    public static int[] dr = {-1, 1, 0, 0}; // 상하좌우 중 세로(행) 움직임 방향배열
+    public static int[] dc = {0, 0, -1, 1}; // 상하좌우 중 가로(열) 움직임 방향배열
+    
+    public static StringBuilder sb = new StringBuilder();
+    
+    public static void main(String[] args)throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        
+        int T = Integer.parseInt(br.readLine());
+        for(int i = 0; i<T; i++){
+            int count = 0;
+            st = new StringTokenizer(br.readLine()," ");
+            M = Integer.parseInt(st.nextToken());
+            N = Integer.parseInt(st.nextToken());
+            K = Integer.parseInt(st.nextToken());
+            
+            map = new int[N][M];
+            //visited = new int[N][M]; // boolean인데 int로 씀
+            visited = new boolean[N][M];
+            
+            for(int j = 0; j<K; j++){
+                st = new StringTokenizer(br.readLine()," ");
+                int c = Integer.parseInt(st.nextToken());
+                int r = Integer.parseInt(st.nextToken());
+                
+                map[r][c]=1;
+            }
+            for(int j = 0; j<N; j++){
+                for(int k = 0; k<M; k++){
+                    if(map[j][k]!=0&&(!visited[j][k])){
+                        BFS(j, k);
+                        count++;
+                    }
+                }
+            }
+            sb.append(count+"\n");
+            
+        }
+        System.out.println(sb.toString());
+    }
+    public static void BFS(int row, int col){
+        //ArrayDeque<Integer>queue = new ArrayDeque<>(); Node 배열인데 Integer로 씀
+        ArrayDeque<Node>queue = new ArrayDeque<>();
+        queue.offer(new Node(row, col));
+        
+        visited[row][col]=true;
+        
+        while(!queue.isEmpty()){
+            Node nowNode = queue.poll();
+            
+            for(int i = 0; i<4; i++){
+                int nextRow = nowNode.r + dr[i];
+                int nextCol = nowNode.c + dc[i];
+                
+                //if(nextRow<0 || nextRow>=N; || nextCol<0 || nextCol>=M) continue; 어째선지 세미콜론 찍음
+                if(nextRow<0 || nextRow>=N || nextCol<0 || nextCol>=M) continue;
+                if(visited[nextRow][nextCol] || map[nextRow][nextCol]==0) continue;
+                
+                queue.offer(new Node(nextRow, nextCol));
+                visited[nextRow][nextCol]=true;
+            }
+            
+        }
+    }
+}
+class Node{
+    int r;
+    int c;
+    
+    public Node(int r, int c){
+        this.r = r;
+        this.c = c;
+    }
+}
