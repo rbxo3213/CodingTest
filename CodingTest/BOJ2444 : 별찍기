@@ -1,0 +1,38 @@
+import java.util.*;
+public class Main{
+    public static StringBuilder sb;
+    public static String[] starStack;
+
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+
+        int N = Integer.parseInt(sc.nextLine());
+        starStack = new String[N*2-1];
+        for(int i = 0; i<N; i++){
+            sb = new StringBuilder();
+            space(N-1-i);
+            star(2*i+1);
+            sb.append("\n");
+            starStack[i]=sb.toString();
+        }
+        for(int i = N; i<starStack.length; i++){
+            starStack[i]=starStack[starStack.length-1-i];
+        }
+        sb = new StringBuilder();
+        for(String s : starStack){
+            sb.append(s);
+        }
+        System.out.print(sb.toString());
+    }
+    public static void space(int n){
+        for(int i = 0; i<n; i++){
+            sb.append(" ");
+        }
+    }
+    public static void star(int n){
+        for(int i = 0; i<n; i++){
+            sb.append("*");
+        }
+    }
+}
+// 좀 이상하게 풀었는데.. 그냥 상단부 for문 내부에서 공백for문, 별 for문 하고, 하단부 for문 내부에서 공백for문, 별for문 해서 간단히 풀어보기!
