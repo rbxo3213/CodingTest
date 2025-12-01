@@ -1,0 +1,16 @@
+import java.util.*;
+class Solution {
+    public int[] solution(String[] intStrs, int k, int s, int l) {
+        List<Integer> answer = new ArrayList<>();
+        for(String str : intStrs){
+            int tmp = Integer.parseInt(str.substring(s,s+l));
+            if(tmp>k) answer.add(tmp);
+        }
+        return answer.stream().mapToInt(i->i).toArray();
+    }
+}
+
+// SQL에서의 substr은 인자로 문자열, 시작인덱스, 길이
+// java에서의 substring은 인자로 시작인덱스, 끝 인덱스
+
+// 헷갈림 주의
