@@ -1,0 +1,106 @@
+import java.util.*;
+import java.io.*;
+
+public class Main {
+	private static int N;
+	private static int M;
+	private static int H;
+	private static int[][][] boxes;
+	private static boolean[][][] visited;
+	
+	private static final int[] dirH = {-1, 1, 0, 0, 0, 0}; // z축 이동
+	private static final int[] dirN = {0, 0, -1, 1, 0, 0}; // y축 이동
+	private static final int[] dirM = {0, 0, 0, 0, -1, 1}; // x축 이동
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+
+		M = Integer.parseInt(st.nextToken());
+		N = Integer.parseInt(st.nextToken());
+		H = Integer.parseInt(st.nextToken());
+		
+		boxes = new int[H][N][M];
+		visited = new boolean[H][N][M];
+		ArrayDeque<Node2> queue = new ArrayDeque<>();
+		
+		for (int i = 0; i < H; i++) { // 상자의 수			
+			for (int j = 0; j < N; j++) { // 상자의 row
+				st = new StringTokenizer(br.readLine(), " ");
+				for (int k = 0; k < M; k++) { // 상자의 col
+					int value = Integer.parseInt(st.nextToken());
+					boxes[i][j][k] = value;
+					if (value == 1) {
+						queue.offer(new Node2(i, j, k));
+						visited[i][j][k] = true;
+					} else if (value == 0) {
+					}
+				}
+			}
+		}
+		
+		solution(queue);
+	}
+	public static void solution(ArrayDeque<Node2> queue) {
+		BFS(queue);
+		int max = 0;
+		boolean none = true;
+		loop:
+		for (int[][] boxH : boxes) {
+			for (int[] boxR : boxH) {
+				for (int boxC : boxR) {
+					if (boxC == 0) {
+						none = false;
+						break loop;
+					} else {
+						if (max < boxC) {
+							max = boxC;
+						}
+					}
+				}
+			}
+		}
+		if (none) {
+			System.out.println(max > 1 ? max - 1 : 0);
+		} else {
+			System.out.println(-1);
+		}
+	}
+	public static void BFS(ArrayDeque<Node2> queue) {
+
+		while (!queue.isEmpty()) {
+			Node2 nowNode = queue.poll();
+			for (int i = 0; i < 6; i++) {
+				int dH = nowNode.height + dirH[i];
+				int dN = nowNode.row + dirN[i];
+				int dM = nowNode.col + dirM[i];
+				
+				if (dH < 0 || dH >= H || dN < 0 || dN >= N || dM < 0 || dM >= M) {
+					continue;
+				}
+				if (visited[dH][dN][dM] || boxes[dH][dN][dM] == -1) {
+					continue;
+				}
+				queue.offer(new Node2(dH, dN, dM));
+				visited[dH][dN][dM] = true;
+				boxes[dH][dN][dM] = boxes[nowNode.height][nowNode.row][nowNode.col] + 1;
+			}
+		}
+	}
+}
+class Node2 {
+	int height;
+	int row;
+	int col;
+	
+	public Node2(int height, int row, int col) {
+		this.height = height;
+		this.row = row;
+		this.col = col;
+	}
+}
+
+
+//“시작 노드들을 번갈아”가 아니라 처음부터 큐에 다 넣고 한 번에 BFS
+// dist를 따로 두지 말고, boxes 자체를 날짜로 덮어쓰기
+
