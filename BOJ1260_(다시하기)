@@ -1,6 +1,6 @@
 import java.io.*;
 import java.util.*;
-//다시풀기
+//다시풀기 .>?
 public class Main{
     public static List<ArrayList<Integer>>list = new ArrayList<>();
     public static List<Boolean>visited = new ArrayList<>();
