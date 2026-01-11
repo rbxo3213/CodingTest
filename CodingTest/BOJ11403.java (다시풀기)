@@ -1,0 +1,73 @@
+import java.util.*;
+import java.io.*;
+
+public class Main {
+    private static int[][] answer;
+    private static ArrayList<Integer>[] graph;
+    private static int n;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        n = Integer.parseInt(br.readLine());
+        answer = new int[n + 1][n + 1];
+        StringBuilder sb = new StringBuilder();
+        
+        graph = new ArrayList[n + 1];
+        for (int i = 0; i <= n; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        for (int i = 1; i <= n; i++) {
+            st = new StringTokenizer(br.readLine(), " ");
+            for (int j = 1; j <= n; j++) {
+                if ("1".equals(st.nextToken())) {
+                    graph[i].add(j);
+                }
+            }
+        }
+        for (int i = 1; i <= n; i++) {
+            bfs(i);
+        }
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                sb.append(answer[i][j] + " ");
+            }
+            sb.append("\n");
+        }
+        System.out.print(sb.toString());
+    }
+    private static void bfs(int start) {
+        Deque<Integer> queue = new ArrayDeque<>();
+        boolean[] visited = new boolean[n + 1];
+        
+        for (int next : graph[start]) {
+            if (!visited[next]) {
+                visited[next] = true;
+                answer[start][next] = 1;
+                queue.offer(next);
+            }
+        }
+        
+        while(!queue.isEmpty()) {
+            int nowNode = queue.poll();
+            for (int next : graph[nowNode]) {
+                if (!visited[next]) {
+                    visited[next] = true;
+                    answer[start][next] = 1;
+                    queue.offer(next);
+                }
+            }
+
+        }
+    }
+    /*
+    static class Node {
+        int head;
+        ArrayList<Integer> tails;
+        
+        public Node(int head, ArrayList<Integer> tails) {
+            this.head = head;
+            this.tails = tails;
+        }
+    }
+    */
+}
